@@ -5,16 +5,16 @@
   fetch("http://localhost:3000/api/products")
   .then (async response => {
     try{
-      const produits = await response.json();
-      console.log(produits);
-      displayResult(produits);
+      const products = await response.json();
+      console.log(products);
+      displayResult(products);
     } catch (e){
       console.log(e);
     }
   })
 }
 
-// fonction pour afficher chaque produits du tableau de produits , prend en parametre un tableau sur lequel nous allons itérer
+// fonction pour inserer chaque produits du tableau de produits , prend en parametre un tableau sur lequel nous allons itérer
 
 function displayResult(array) {
  
