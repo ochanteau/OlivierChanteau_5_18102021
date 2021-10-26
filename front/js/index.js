@@ -20,6 +20,7 @@ function displayResult(array) {
  
   array.forEach(data => {
     const a = document.createElement("a");
+    a.setAttribute("href", `./product.html?id=${data._id}`)
     a.innerHTML =
     `
     <article>
@@ -36,6 +37,9 @@ function displayResult(array) {
   
 }
 
+
+
+// 
 
 
 
