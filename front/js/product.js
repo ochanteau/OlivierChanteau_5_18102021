@@ -36,36 +36,12 @@ function displayResult(product) {
     const description = document.getElementById("description");
     description.innerText = `${product.description}` ;
 
-    const colorsArray = product.colors;
-   
-
-    colorsArray.forEach(index=> {
+    product.colors.forEach(color=> {
         const option = document.createElement("option");
-        option.setAttribute("value", `${index}`);
-        option.textContent = `${index}`
+        option.setAttribute("value", `${color}`);
+        option.textContent = `${color}`
         document.getElementById("colors").append(option);
-      
-      
-        
-      });
-
-
-
-    //   a.setAttribute("href", `./product.html?id=${data._id}`)
-    //   a.innerHTML =
-    //   `
-    //   <article>
-    //   <img src="${data.imageUrl}" alt ="${data.altTxt}" >
-    //   <h3 class="productName">${data.name}</h3>
-    //   <p class="productDescription">${data.description}</p>
-    //   </article>
-    //   `;
-    //   document.querySelector("#items").append(a);
-    
-    
-      
-  
-    
+      });    
   }
   
   displayProduct  ()
