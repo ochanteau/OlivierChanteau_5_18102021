@@ -1,7 +1,10 @@
+// recupération de l'URL de la page courante
 const currentPage = window.location.href;
 console.log(location);
+// creation objet URL avec la page courante
 var url = new URL (currentPage);
 console.log(url);
+// recupération de l'id produit de la page courante
 const id = url.searchParams.get("id");
 console.log(id);
 
@@ -43,5 +46,54 @@ function displayResult(product) {
         document.getElementById("colors").append(option);
       });    
   }
+
+
+// 
+
+const cart = [{id: '107fb5b75607497b96722bda5b504926', color: 'Blue', quantity: 3}];
+class cartItem {
+    constructor(id, color, quantity) {
+    this.id = id;
+    this.color = color;
+    this.quantity = quantity;
+    }
+    }
+
+
+ const addToCart= document.getElementById("addToCart");
+
+ addToCart.addEventListener("click", ()=> {
+    const itemQuantity=  Number(document.getElementById("quantity").value);
+    const selectColor = document.getElementById("colors").value;
+    const  product = new cartItem (id,selectColor,itemQuantity);
+    console.log(product);
+    // const verification = cart.findIndex(x=> x.id === product.id && x.color === product.color );
+    // console.log(verification);
+    // if (verification !== -1) { cart[verification].quantity += product.quantity}
+    // else {
+    //     cart.push(product);
+    // }
+    
+    if ( itemQuantity !== 0 && selectColor !=="") {verification (cart,product)} ;
+
+ 
   
-  displayProduct  ()
+})
+
+
+function verification (array,object) {
+  const verification = array.findIndex(x=> x.id === object.id && x.color === object.color );
+    console.log(verification);
+    if (verification !== -1) { array[verification].quantity += object.quantity}
+    else {
+      array.push(object);
+    }
+}
+
+console.log(cart);
+
+
+
+
+  
+  displayProduct  ();
