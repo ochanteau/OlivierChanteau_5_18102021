@@ -12,3 +12,15 @@
   // .catch(function(err) {
   //   // Une erreur est survenue
   // });
+
+
+
+
+
+
+   // const verification = cart.findIndex(x=> x.id === product.id && x.color === product.color );
+    // console.log(verification);
+    // if (verification !== -1) { cart[verification].quantity += product.quantity}
+    // else {
+    //     cart.push(product);
+    // }

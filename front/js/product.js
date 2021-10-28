@@ -1,12 +1,12 @@
 // recupération de l'URL de la page courante
 const currentPage = window.location.href;
-console.log(location);
+
 // creation objet URL avec la page courante
 var url = new URL (currentPage);
-console.log(url);
+
 // recupération de l'id produit de la page courante
 const id = url.searchParams.get("id");
-console.log(id);
+
 
 // fonction pour afficher les caractéristiques du produit sur la page produit
 function displayProduct  () {
@@ -14,7 +14,7 @@ function displayProduct  () {
     .then (async response => {
       try{
         const product = await response.json();
-        console.log(product);
+     
         displayResult(product);
       } catch (e){
         console.log(e);
@@ -50,7 +50,12 @@ function displayResult(product) {
 
 // 
 
-const cart = [{id: '107fb5b75607497b96722bda5b504926', color: 'Blue', quantity: 3}];
+// const cart = [{id: '107fb5b75607497b96722bda5b504926', color: 'Blue', quantity: 3},
+// {id: '107fb5b75607497b96722bda5b504926', color: 'White', quantity: 3}];
+// let cart = [];
+// let cart = [JSON.parse(localStorage.getItem("panier"))];
+// console.log(cart);
+
 class cartItem {
     constructor(id, color, quantity) {
     this.id = id;
@@ -61,23 +66,35 @@ class cartItem {
 
 
  const addToCart= document.getElementById("addToCart");
+ const cart = [JSON.parse(localStorage.getItem("panier"))];
+ console.log(cart);
+
 
  addToCart.addEventListener("click", ()=> {
     const itemQuantity=  Number(document.getElementById("quantity").value);
     const selectColor = document.getElementById("colors").value;
     const  product = new cartItem (id,selectColor,itemQuantity);
     console.log(product);
-    // const verification = cart.findIndex(x=> x.id === product.id && x.color === product.color );
-    // console.log(verification);
-    // if (verification !== -1) { cart[verification].quantity += product.quantity}
-    // else {
-    //     cart.push(product);
-    // }
     
-    if ( itemQuantity !== 0 && selectColor !=="") {verification (cart,product)} ;
+    
+    
 
- 
+
+    // if ( itemQuantity !== 0 && selectColor !=="") {
+    //   verification (cart,product);
+    //   localStorage.setItem("panier", JSON.stringify(cart));
+    // } ;
   
+
+    if (cart[0] == null) { cart[0] = product}
+    else {verification (cart,product) }
+
+    console.log(cart);
+    localStorage.clear();
+   
+    localStorage.setItem("panier", JSON.stringify(cart));
+    
+      
 })
 
 
@@ -90,10 +107,15 @@ function verification (array,object) {
     }
 }
 
-console.log(cart);
 
 
 
+// localStorage.setItem("panier", JSON.stringify(cart));
+console.log(localStorage);
+console.log(JSON.parse(localStorage.getItem("panier")));
+// localStorage.clear();
 
-  
-  displayProduct  ();
+// console.log(JSON.parse(localStorage.getItem("panier")));
+ displayProduct  ();
+
+
