@@ -66,7 +66,7 @@ class cartItem {
 
 
  const addToCart= document.getElementById("addToCart");
- const cart = [JSON.parse(localStorage.getItem("panier"))];
+ let cart = JSON.parse(localStorage.getItem("panier"));
  console.log(cart);
 
 
@@ -80,19 +80,24 @@ class cartItem {
     
 
 
-    // if ( itemQuantity !== 0 && selectColor !=="") {
-    //   verification (cart,product);
-    //   localStorage.setItem("panier", JSON.stringify(cart));
-    // } ;
+    if ( itemQuantity !== 0 && selectColor !=="") {
+      if (cart == null) { cart = [product]}
+      else {verification (cart,product) }
+  
+      console.log(cart);
+      localStorage.clear();
+     
+      localStorage.setItem("panier", JSON.stringify(cart));
+    } 
   
 
-    if (cart[0] == null) { cart[0] = product}
-    else {verification (cart,product) }
+    // if (cart[0] == null) { cart[0] = product}
+    // else {verification (cart,product) }
 
-    console.log(cart);
-    localStorage.clear();
+    // console.log(cart);
+    // localStorage.clear();
    
-    localStorage.setItem("panier", JSON.stringify(cart));
+    // localStorage.setItem("panier", JSON.stringify(cart));
     
       
 })
