@@ -1,43 +1,53 @@
+
+// recupération du panier dans le localStorage
 let cart = JSON.parse(localStorage.getItem("panier"));
 console.log(cart);
 
-function displayCart (array) {
+// ciblage prix total et quantité total
+
+let  selectTotalQuantity = document.getElementById("totalQuantity");
+let  selectTotalPrice = document.getElementById("totalPrice");
+
+// vérification que le panier n 'est pas vide
     if (cart == null) {
-        document.getElementById("totalQuantity").textContent = "0";
-        document.getElementById("totalPrice").textContent = "0";
+        selectTotalQuantity.textContent = "0";
+        selectTotalPrice.textContent = "0";
     }
-    else {
+    else { displayCart(cart);
 
     }
-}
 
 
+// Fonction qui affiche les différents éléménts du panier sur la page
 
-
-
-
-
-function displayResult(array) {
- 
+function displayCart(array) {
+    let totalQuantity = 0;
+    let totalPrice = 0;
     array.forEach((data,index,array) => {
-
+        
+          
         fetch(`http://localhost:3000/api/products/${data.id}`)
         .then (async response => {
           try{
             const product = await response.json();
-         
+            
             displayProduct(product,index,array);
+            totalQuantity += array[index].quantity;
+            totalPrice += Number(product.price);
+            selectTotalQuantity .textContent =  `${totalQuantity}`;
+            selectTotalPrice.textContent = `${totalPrice}`;
+            console.log(totalPrice,totalQuantity);
           } catch (e){
             console.log(e);
           }
         })
       
     });
-    
+
   }
 
 
-
+//  fonction qui affiche sur la page les différents caractéristiques du produit en parametre 
 
   function displayProduct(data,index,array){
     const article = document.createElement("article");
@@ -66,7 +76,6 @@ function displayResult(array) {
     </div>
     `;
     document.querySelector("#cart__items").append(article);
+    
   
   }
-
-  displayResult(cart);
