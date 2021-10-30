@@ -30,13 +30,13 @@ function displayCart(array) {
         .then (async response => {
           try{
             const product = await response.json();
-            
             displayProduct(product,index,array);
+
             totalQuantity += array[index].quantity;
-            totalPrice += Number(product.price);
+            totalPrice += (product.price * array[index].quantity);
             selectTotalQuantity .textContent =  `${totalQuantity}`;
             selectTotalPrice.textContent = `${totalPrice}`;
-            console.log(totalPrice,totalQuantity);
+           
           } catch (e){
             console.log(e);
           }
@@ -52,6 +52,7 @@ function displayCart(array) {
   function displayProduct(data,index,array){
     const article = document.createElement("article");
     article.setAttribute("data-id", `${data._id}`);
+    article.setAttribute("data-color", `${array[index].color}`);
     article.className = "cart__item";
     article.innerHTML =
     `
@@ -78,4 +79,73 @@ function displayCart(array) {
     document.querySelector("#cart__items").append(article);
     
   
+  }
+
+//   localStorage.clear();
+
+
+// 
+const cartList =document.getElementById("cart__items");
+
+// cartList.closest()
+// const input = document.querySelector("#cart__items").querySelectorAll(".cart__item");
+// console.log(input);
+// let closest = input.closest("article");
+// console.log(closest);
+
+// input.addEventListener("change", ()=> {console.log(input.value, input)})
+
+
+
+cartList.addEventListener("change", event => {
+//   if (event.target.className != "bouton-supprimer") {
+//     return null;
+//   }
+  const cartItem = event.target.closest(".cart__item");
+  console.log(cartItem.dataset.id);
+  console.log(cartItem);
+  quantityModification (cart,cartItem,event);
+  console.log(cart);
+  displayCart(cart);  
+  localStorage.clear();
+  localStorage.setItem("panier", JSON.stringify(cart));
+});
+
+function quantityModification (array,element,event) {
+    const findIndex = array.findIndex(x=> x.id === element.dataset.id && x.color === element.dataset.color );
+    console.log(findIndex);
+    array[findIndex].quantity = Number(event.target.value);
+    console.log(event.target.value);
+    document.querySelector("#cart__items").innerHTML ="";
+    // localStorage.clear();
+    // localStorage.setItem("panier", JSON.stringify(array));
+    // displayCart(array);
+  }
+  
+
+  cartList.addEventListener("click", event => {
+      if (event.target.className != "deleteItem") {
+        return null;
+      }
+      else {
+      const cartItem = event.target.closest(".cart__item");
+      console.log(cartItem.dataset.id);
+      console.log(cartItem);
+      removeItem(cart,cartItem);
+      console.log(cart);
+      displayCart(cart);  
+      localStorage.clear();
+      localStorage.setItem("panier", JSON.stringify(cart));
+      }
+    });
+ 
+  function removeItem (array,element) {
+    const findIndex = array.findIndex(x=> x.id === element.dataset.id && x.color === element.dataset.color );
+    console.log(findIndex);
+    array.splice(findIndex,1);
+    console.log(array);
+    document.querySelector("#cart__items").innerHTML ="";
+    // localStorage.clear();
+    // localStorage.setItem("panier", JSON.stringify(array));
+    // displayCart(array);
   }
