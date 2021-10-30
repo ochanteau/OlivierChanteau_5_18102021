@@ -104,7 +104,9 @@ cartList.addEventListener("change", event => {
   const cartItem = event.target.closest(".cart__item");
   console.log(cartItem.dataset.id);
   console.log(cartItem);
-  quantityModification (cart,cartItem,event);
+  // quantityModification (cart,cartItem,event);
+  if (event.target.value == 0) { removeItem(cart,cartItem)}
+  else {quantityModification (cart,cartItem,event)}
   console.log(cart);
   displayCart(cart);  
   localStorage.clear();
