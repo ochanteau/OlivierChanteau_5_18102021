@@ -9,14 +9,15 @@ let  selectTotalQuantity = document.getElementById("totalQuantity");
 let  selectTotalPrice = document.getElementById("totalPrice");
 
 // vérification que le panier n 'est pas vide
-    if (cart == null) {
+
+function updateCart() {
+    if (cart == null || cart.length == 0) {
         selectTotalQuantity.textContent = "0";
         selectTotalPrice.textContent = "0";
     }
-    else { displayCart(cart);
+    else { displayCart(cart)}
 
-    }
-
+  }
 
 // Fonction qui affiche les différents éléménts du panier sur la page
 
@@ -87,28 +88,17 @@ function displayCart(array) {
 // 
 const cartList =document.getElementById("cart__items");
 
-// cartList.closest()
-// const input = document.querySelector("#cart__items").querySelectorAll(".cart__item");
-// console.log(input);
-// let closest = input.closest("article");
-// console.log(closest);
-
-// input.addEventListener("change", ()=> {console.log(input.value, input)})
 
 
 
 cartList.addEventListener("change", event => {
-//   if (event.target.className != "bouton-supprimer") {
-//     return null;
-//   }
+
   const cartItem = event.target.closest(".cart__item");
-  console.log(cartItem.dataset.id);
-  console.log(cartItem);
-  // quantityModification (cart,cartItem,event);
   if (event.target.value == 0) { removeItem(cart,cartItem)}
   else {quantityModification (cart,cartItem,event)}
-  console.log(cart);
-  displayCart(cart);  
+  document.querySelector("#cart__items").innerHTML ="";
+  // displayCart(cart);  
+  updateCart();
   localStorage.clear();
   localStorage.setItem("panier", JSON.stringify(cart));
 });
@@ -118,10 +108,8 @@ function quantityModification (array,element,event) {
     console.log(findIndex);
     array[findIndex].quantity = Number(event.target.value);
     console.log(event.target.value);
-    document.querySelector("#cart__items").innerHTML ="";
-    // localStorage.clear();
-    // localStorage.setItem("panier", JSON.stringify(array));
-    // displayCart(array);
+    // document.querySelector("#cart__items").innerHTML ="";
+   
   }
   
 
@@ -131,11 +119,9 @@ function quantityModification (array,element,event) {
       }
       else {
       const cartItem = event.target.closest(".cart__item");
-      console.log(cartItem.dataset.id);
-      console.log(cartItem);
       removeItem(cart,cartItem);
-      console.log(cart);
-      displayCart(cart);  
+      document.querySelector("#cart__items").innerHTML ="";
+      updateCart() ; 
       localStorage.clear();
       localStorage.setItem("panier", JSON.stringify(cart));
       }
@@ -143,11 +129,8 @@ function quantityModification (array,element,event) {
  
   function removeItem (array,element) {
     const findIndex = array.findIndex(x=> x.id === element.dataset.id && x.color === element.dataset.color );
-    console.log(findIndex);
-    array.splice(findIndex,1);
-    console.log(array);
-    document.querySelector("#cart__items").innerHTML ="";
-    // localStorage.clear();
-    // localStorage.setItem("panier", JSON.stringify(array));
-    // displayCart(array);
+    array.splice(findIndex,1);    
   }
+
+  updateCart();
+    // localStorage.clear();
