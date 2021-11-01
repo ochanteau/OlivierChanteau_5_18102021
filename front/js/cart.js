@@ -85,10 +85,13 @@ function displayCart(array) {
 //   localStorage.clear();
 
 
-// 
+// ciblage de la liste d'article du panier
 const cartList =document.getElementById("cart__items");
 
-
+/*  fonction qui écoute les modifications de quantité sur les produits
+*   et appel la fonction quantityModification si la quantité est toujours positive 
+*   ou removeItem si la quantité est négative 
+*/
 
 
 cartList.addEventListener("change", event => {
@@ -102,6 +105,10 @@ cartList.addEventListener("change", event => {
   localStorage.setItem("panier", JSON.stringify(cart));
 });
 
+
+/*  fonction qui cherche l'index du produit concerné par la modification
+*   et modifie sa quantité par l'élément saisie en input
+*/
 function quantityModification (array,element,event) {
     const findIndex = array.findIndex(x=> x.id === element.dataset.id && x.color === element.dataset.color );
     console.log(findIndex);
@@ -111,6 +118,12 @@ function quantityModification (array,element,event) {
    
   }
   
+
+  /*  fonction qui écoute la demande de suppression des produits
+*   et appel la fonction removeItem 
+* 
+*/
+
 
   cartList.addEventListener("click", event => {
       if (event.target.className != "deleteItem") {
@@ -125,20 +138,19 @@ function quantityModification (array,element,event) {
       localStorage.setItem("panier", JSON.stringify(cart));
       }
     });
- 
+
+/*  fonction qui cherche l'index du produit concerné par la suppression 
+*   et le supprime
+*/
   function removeItem (array,element) {
     const findIndex = array.findIndex(x=> x.id === element.dataset.id && x.color === element.dataset.color );
     array.splice(findIndex,1);    
   }
 
-  updateCart();
-    // localStorage.clear();
 
 
+// ciblage des différents input du formulaire
 
-
-
-// valdiation commande
 
 const selectForm = document.querySelector(".cart__order__form");
 const selectFirstName = document.getElementById("firstName");
@@ -147,6 +159,7 @@ const selectAddress = document.getElementById("address");
 const selectCity = document.getElementById("city");
 const selectEmail = document.getElementById("email");
 
+// création d'une classe Contact qui prend en parametre les valeurs saisies en input
 class Contact {
   constructor(firstname, lastname,address,city,email) {
   this.firstName = firstname;
@@ -157,24 +170,11 @@ class Contact {
   }
   }
 
-// selectFirstName.addEventListener ("change", (event) => {
-//   event.stopPropagation;
-//     if (/\d/.test(selectFirstName.value)) {
-//       document.getElementById("firstNameErrorMsg").textContent = "Merci d'inscrire votre prénom en lettres" ;
-//     }  else {  
-//       document.getElementById("firstNameErrorMsg").textContent ="";}
-//       }
-//     )
 
-// selectLastName.addEventListener ("change", (event) => {
-//   event.stopImmediatePropagation;
-//   if (/\d/.test(selectLastName.value)) {document.getElementById("lastNameErrorMsg").textContent = "Merci d'inscrire votre nom en lettres" ;
-// }  else {  
-//   document.getElementById("lastNameErrorMsg").textContent = "";}
-//         }
-//       )
-
-
+  /*  fonction qui verifie les différents champs du formulaire avec Regexp
+*  renvoie true si tous les champs son correctement remplient
+* 
+*/
 function checkForm () {
   let counter = 0;
 
@@ -209,55 +209,30 @@ function checkForm () {
 }
 
 
-
+  /*  fonction pour ecouter la soumission du formulaire 
+  * et appeler les fonctions suivantes : 
+  * checkForm () 
+  * créer l'objet contact
+*   setIdArray () pour récupérer id des produits du panier
+*   getId () pour requet post et recupérer id commande
+*/
 
 selectForm.addEventListener ("submit", (event) => {
-  
   event.preventDefault();
-  checkForm ();
   const check = checkForm();
-  console.log(check);
-  if (check){ console.log("formulaire valide")}
-  else console.log( "formulaire non valide ")
-   
+  if (check){ 
+    const contact = new Contact (selectFirstName.value,selectLastName.value,selectAddress.value,selectCity.value,selectEmail.value);
+    console.log (contact);
+    const products = setIdArray (cart);
+    console.log (products);
+    getId (contact,products) ;
+    localStorage.clear();
 
-
-   
   }
-)
+  else{ return null}
+})
 
-
-
-// console.log(/[a-zA-Z]/.test("Piere-eZE"));
-// console.log(/\d/.test("PiereeZE23"))
-// console.log((/[a-zA-Z]/.test("Piere-eZE"))& (/\D/.test("23")))
-// if (/[a-zA-Z]/.test("Piere-eZE")& /\D/.test("PiereeZE23")) {
-//   console.log("ok")
-// }
-
-
-
-
-
-
-// fonction pour ecouter la soumission du formulaire et appeler les fonctions suivantes si tous les champs du formulaire sont bien remplis
-// selectForm.addEventListener ("submit", (event) => {
-//   const check = checkForm();
-//   if (check != 5 ){ event.preventDefault()}
-//   else{
-//     const contact = new Contact (selectFirstName.value,selectLastName.value,selectAddress.value,selectCity.value,selectEmail.value);
-//     console.log (contact);
-//     // const idArray =[];
-//     const products = setIdArray (cart);
-//     // setIdArray (cart,idArray);
-//     console.log (products);
-
-
-//     // localStorage.clear();
-//   }
-// })
-
-// fonction de recupération de la clé id d'un array
+// fonction de recupération de la clé id d'un array d'objet
 function setIdArray (array) {
  
   array.map(item=>item.id);
@@ -265,11 +240,8 @@ function setIdArray (array) {
 }
 
 // requete POST 
-const contact = new Contact ("dzdzd","dzdzd","dzdzd","23 adededede dedede", "deded@dezdz.fr");
 
-const products = ["415b7cacb65d43b2b5c1ff70f3393ad1" ]
-
- function getId () {
+ function getId (contact,products) {
   fetch("http://localhost:3000/api/products/order", {
 	method: "POST",
 	headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
@@ -278,9 +250,11 @@ const products = ["415b7cacb65d43b2b5c1ff70f3393ad1" ]
   )
   .then (async response => {
         try{
-              const getId = await response.json();
-    console.log(getId.orderId)
-    return getId.orderId
+    const getId = await response.json();
+    console.log(getId);
+    console.log(getId.orderId);
+    location.assign(`./confirmation.html?id=${getId.orderId}`);
+  
    
    
   } catch (e){
@@ -288,9 +262,6 @@ const products = ["415b7cacb65d43b2b5c1ff70f3393ad1" ]
   }
 })
 }
-
-const id = getId();
-console.log(id);
 
 
 /**
@@ -307,3 +278,4 @@ console.log(id);
  *
  */
 
+ updateCart();
