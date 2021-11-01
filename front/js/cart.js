@@ -157,74 +157,140 @@ class Contact {
   }
   }
 
+// selectFirstName.addEventListener ("change", (event) => {
+//   event.stopPropagation;
+//     if (/\d/.test(selectFirstName.value)) {
+//       document.getElementById("firstNameErrorMsg").textContent = "Merci d'inscrire votre prénom en lettres" ;
+//     }  else {  
+//       document.getElementById("firstNameErrorMsg").textContent ="";}
+//       }
+//     )
+
+// selectLastName.addEventListener ("change", (event) => {
+//   event.stopImmediatePropagation;
+//   if (/\d/.test(selectLastName.value)) {document.getElementById("lastNameErrorMsg").textContent = "Merci d'inscrire votre nom en lettres" ;
+// }  else {  
+//   document.getElementById("lastNameErrorMsg").textContent = "";}
+//         }
+//       )
+
 
 function checkForm () {
   let counter = 0;
+
   if (/\d/.test(selectFirstName.value)) {
-    document.getElementById("firstNameErrorMsg").textContent = "Merci d'inscrire votre prénom en lettre" ;
-  } else { counter += 1}
-  if (/\d/.test(selectLastName.value)) {
-    document.getElementById("lastNameErrorMsg").textContent = "Merci d'inscrire votre nom en lettre" ;
-  } else { counter += 1}
-  if (/\d/.test(selectAddress.value)) {
-    document.getElementById("addressErrorMsg").textContent = "Merci d'inscrire votre adresse" ;
-  } else { counter += 1}
-  if (/\d/.test(selectCity.value)) {
-    document.getElementById("cityErrorMsg").textContent = "Merci d'inscrire votre ville en lettre" ;
-  } else { counter += 1}
-  if (/\d/.test(selectEmail.value)) {
-    document.getElementById("emailErrorMsg").textContent = "Merci de renseigner un email valide" ;
-  } else { counter += 1}
-  return counter
+    document.getElementById("firstNameErrorMsg").textContent = "Merci d'inscrire votre prénom en lettres" ;
+  }  else { 
+    counter += 1;
+    document.getElementById("firstNameErrorMsg").textContent =""}
+
+  if (/\d/.test(selectLastName.value)) {document.getElementById("lastNameErrorMsg").textContent = "Merci d'inscrire votre nom en lettres" 
+  }  else { 
+    counter += 1;
+    document.getElementById("lastNameErrorMsg").textContent = ""}
+
+  if (/[0-9A-Za-z]/.test(selectAddress.value)) {
+     counter += 1
+     document.getElementById("addressErrorMsg").textContent = ""} 
+  else {document.getElementById("addressErrorMsg").textContent = "Merci d'inscrire votre adresse" }
+
+  if (/\d/.test(selectCity.value)) {document.getElementById("cityErrorMsg").textContent = "Merci d'inscrire votre ville en lettres" ;
+  } else {
+    counter += 1
+    document.getElementById("cityErrorMsg").textContent = ""}
+  if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(selectEmail.value)) {
+    counter += 1
+    document.getElementById("emailErrorMsg").textContent = ""  }
+  else { document.getElementById("emailErrorMsg").textContent = "Merci de renseigner un email valide" }
+  if (counter === 5){ return true}
+  else return false
+
 
 }
 
+
+
+
 selectForm.addEventListener ("submit", (event) => {
+  
+  event.preventDefault();
+  checkForm ();
   const check = checkForm();
-  if (check != 5 ){ event.preventDefault}
-  else{
-    const contact = new Contact (selectFirstName.value,selectLastName.value,selectAddress.value,selectCity.value,selectEmail.value);
-    console.log (contact);
-    // const idArray =[];
-    const idArray = setIdArray (cart);
-    // setIdArray (cart,idArray);
-    console.log (idArray);
+  console.log(check);
+  if (check){ console.log("formulaire valide")}
+  else console.log( "formulaire non valide ")
+   
 
+
+   
   }
-})
+)
 
 
+
+// console.log(/[a-zA-Z]/.test("Piere-eZE"));
+// console.log(/\d/.test("PiereeZE23"))
+// console.log((/[a-zA-Z]/.test("Piere-eZE"))& (/\D/.test("23")))
+// if (/[a-zA-Z]/.test("Piere-eZE")& /\D/.test("PiereeZE23")) {
+//   console.log("ok")
+// }
+
+
+
+
+
+
+// fonction pour ecouter la soumission du formulaire et appeler les fonctions suivantes si tous les champs du formulaire sont bien remplis
+// selectForm.addEventListener ("submit", (event) => {
+//   const check = checkForm();
+//   if (check != 5 ){ event.preventDefault()}
+//   else{
+//     const contact = new Contact (selectFirstName.value,selectLastName.value,selectAddress.value,selectCity.value,selectEmail.value);
+//     console.log (contact);
+//     // const idArray =[];
+//     const products = setIdArray (cart);
+//     // setIdArray (cart,idArray);
+//     console.log (products);
+
+
+//     // localStorage.clear();
+//   }
+// })
+
+// fonction de recupération de la clé id d'un array
 function setIdArray (array) {
  
   array.map(item=>item.id);
   return array.map(item=>item.id);
 }
 
-
+// requete POST 
 const contact = new Contact ("dzdzd","dzdzd","dzdzd","23 adededede dedede", "deded@dezdz.fr");
 
 const products = ["415b7cacb65d43b2b5c1ff70f3393ad1" ]
 
-fetch("http://localhost:3000/api/products/order", {
+ function getId () {
+  fetch("http://localhost:3000/api/products/order", {
 	method: "POST",
-	headers: { 
-'Accept': 'application/json', 
-'Content-Type': 'application/json' 
-},
-	// body: JSON.stringify({contact:test,products: testid})
-  // body :  JSON.stringify({"contact" : test, "products": testid})
-  // body : { "contact" : test, "products": testid}
+	headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
   body : JSON.stringify({contact,products})
-})
-.then (async response => {
-  try{
-    const id = await response.json();
-    console.log(id)
+  }
+  )
+  .then (async response => {
+        try{
+              const getId = await response.json();
+    console.log(getId.orderId)
+    return getId.orderId
+   
    
   } catch (e){
     console.log(e);
   }
 })
+}
+
+const id = getId();
+console.log(id);
 
 
 /**
@@ -241,10 +307,3 @@ fetch("http://localhost:3000/api/products/order", {
  *
  */
 
-
-// console.log(/[a-zA-Z]/.test("Piere-eZE"));
-// console.log(/\d/.test("PiereeZE23"))
-// console.log((/[a-zA-Z]/.test("Piere-eZE"))& (/\D/.test("23")))
-// if (/[a-zA-Z]/.test("Piere-eZE")& /\D/.test("PiereeZE23")) {
-//   console.log("ok")
-// }
