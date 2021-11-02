@@ -11,7 +11,7 @@ const  selectTotalPrice = document.getElementById("totalPrice");
 // vérification que le panier n 'est pas vide ou Null
 
 function updateCart() {
-    if (cart == null || cart.length == 0) {
+    if ( !cart || cart.length == 0) {
         selectTotalQuantity.textContent = "0";
         selectTotalPrice.textContent = "0";
     }
@@ -82,7 +82,7 @@ function displayCart(array) {
   
   }
 
-//   localStorage.clear();
+  // localStorage.clear();
 
 
 // ciblage de la liste d'article du panier
@@ -235,7 +235,7 @@ selectForm.addEventListener ("submit", (event) => {
 // fonction de recupération de la clé id d'un array d'objet
 function setIdArray (array) {
  
-  array.map(item=>item.id);
+  // array.map(item=>item.id);
   return array.map(item=>item.id);
 }
 
