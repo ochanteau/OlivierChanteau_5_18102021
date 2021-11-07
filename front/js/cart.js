@@ -61,8 +61,15 @@ function displayCart(array) {
   }
 
 
-//  fonction qui affiche sur la page les différents caractéristiques du produit en parametre 
 
+/*
+* displayProduct(data,index,array)
+*  Fonction qui va inserer les différents éléments du produit dans le DOM
+*  @param : {object} poduct , un objet pour récupérer les cles suivantes:
+* (poduct.imageUrl,poduct.altTxt,poduct.name,poduct.price,)
+* @param : index de l'objet en cours d'itération sur le tableau d'objets
+* @param : {array} tableau d'objets {object.id, object.quantity,object.color}
+*/
   function displayProduct(data,index,array){
     const article = document.createElement("article");
     article.setAttribute("data-id", `${data._id}`);
@@ -95,13 +102,15 @@ function displayCart(array) {
   
   }
 
-  // localStorage.clear();
+
 
 
 // ciblage de la liste d'article du panier
 const cartList =document.getElementById("cart__items");
 
-/*  fonction qui écoute les modifications de quantité sur les produits
+/*
+*   cartList.addEventListener
+*   fonction qui écoute les modifications de quantité sur les produits
 *   et appel la fonction quantityModification si la quantité est toujours positive 
 *   ou removeItem si la quantité est négative 
 */
@@ -119,24 +128,27 @@ cartList.addEventListener("change", event => {
 });
 
 
-/*  fonction qui cherche l'index du produit concerné par la modification
+/*
+*  function quantityModification (array,element,event)
+*  fonction qui cherche l'index du produit concerné par la modification
 *   et modifie sa quantité par l'élément saisie en input
+*  @param : {array} sur lequel la recherche va etre effectué
+*  @param : {element} l element ciblé par l'evenement
+*  @param : {event} interface event
+*  
 */
 function quantityModification (array,element,event) {
     const findIndex = array.findIndex(x=> x.id === element.dataset.id && x.color === element.dataset.color );
-    console.log(findIndex);
     array[findIndex].quantity = Number(event.target.value);
-    console.log(event.target.value);
-   
-   
-  }
+}
   
 
-  /*  fonction qui écoute la demande de suppression des produits
+  /* 
+*   cartList.addEventListener
+*   fonction qui écoute la demande de suppression des produits
 *   et appel la fonction removeItem 
-* 
+*   
 */
-
 
   cartList.addEventListener("click", event => {
       if (event.target.className != "deleteItem") {
@@ -152,8 +164,12 @@ function quantityModification (array,element,event) {
       }
     });
 
-/*  fonction qui cherche l'index du produit concerné par la suppression 
+/*  
+*   function removeItem (array,element)
+*   fonction qui cherche l'index du produit concerné par la suppression 
 *   et le supprime
+*   @param {array} tableau dans lequel on souhaite opérer la suppression
+*   @param {element} element du DOM a supprimer
 */
   function removeItem (array,element) {
     const findIndex = array.findIndex(x=> x.id === element.dataset.id && x.color === element.dataset.color );
@@ -164,7 +180,6 @@ function quantityModification (array,element,event) {
 
 // ciblage des différents input du formulaire
 
-
 const selectForm = document.querySelector(".cart__order__form");
 const selectFirstName = document.getElementById("firstName");
 const selectLastName = document.getElementById("lastName");
@@ -172,7 +187,12 @@ const selectAddress = document.getElementById("address");
 const selectCity = document.getElementById("city");
 const selectEmail = document.getElementById("email");
 
-// création d'une classe Contact qui prend en parametre les valeurs saisies en input
+
+/*
+* class Contact
+* constructor { (firstName: string) , (lastName : string) ,(address: string), (city: string), (email:string)}
+* 
+*/
 class Contact {
   constructor(firstname, lastname,address,city,email) {
   this.firstName = firstname;
@@ -181,10 +201,14 @@ class Contact {
   this.city = city;
   this.email = email;
   }
-  }
+}
 
 
-  /*  fonction qui verifie les différents champs du formulaire avec Regexp
+/*  
+*  function checkForm ()
+*  fonction qui verifie les différents champs du formulaire avec des Regexp
+*  indique à l'utilisateur si un champ n'est pas correctement remplit
+*  renvoie false si un champ n'est pas correctement remplit
 *  renvoie true si tous les champs son correctement remplient
 * 
 */
@@ -193,14 +217,18 @@ function checkForm () {
 
   if (/\d/.test(selectFirstName.value)) {
     document.getElementById("firstNameErrorMsg").textContent = "Merci d'inscrire votre prénom en lettres" ;
-  }  else { 
+  }
+  else { 
     counter += 1;
-    document.getElementById("firstNameErrorMsg").textContent =""}
+    document.getElementById("firstNameErrorMsg").textContent =""
+  }
 
   if (/\d/.test(selectLastName.value)) {document.getElementById("lastNameErrorMsg").textContent = "Merci d'inscrire votre nom en lettres" 
-  }  else { 
+  }
+  else { 
     counter += 1;
-    document.getElementById("lastNameErrorMsg").textContent = ""}
+    document.getElementById("lastNameErrorMsg").textContent = ""
+  }
 
   if (/[0-9A-Za-z]/.test(selectAddress.value)) {
      counter += 1
@@ -208,13 +236,15 @@ function checkForm () {
   else {document.getElementById("addressErrorMsg").textContent = "Merci d'inscrire votre adresse" }
 
   if (/\d/.test(selectCity.value)) {document.getElementById("cityErrorMsg").textContent = "Merci d'inscrire votre ville en lettres" ;
-  } else {
+  }
+  else {
     counter += 1
     document.getElementById("cityErrorMsg").textContent = ""}
 
   if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(selectEmail.value)) {
     counter += 1
-    document.getElementById("emailErrorMsg").textContent = ""  }
+    document.getElementById("emailErrorMsg").textContent = ""
+  }
   else { document.getElementById("emailErrorMsg").textContent = "Merci de renseigner un email valide" }
 
   if (counter === 5){ return true}
@@ -224,12 +254,14 @@ function checkForm () {
 }
 
 
-  /*  fonction pour ecouter la soumission du formulaire 
-  * et appeler les fonctions suivantes : 
-  * checkForm () 
-  * créer l'objet contact
-*   setIdArray () pour récupérer id des produits du panier
-*   getId () pour requet post et recupérer id commande
+/*  
+*   selectForm.addEventListener
+*   fonction pour ecouter la soumission du formulaire 
+*   et appeler checkForm ().
+*   Si checkForm () renvoie true , crée une instance de la classe Contact 
+*   avec les valeurs remplis dans le formualire, appel 
+*   setIdArray () pour récupérer id des produits du panier et appel 
+*   getId () pour effectuer une  requete post et recupérer id commande
 */
 
 selectForm.addEventListener ("submit", (event) => {
@@ -237,45 +269,56 @@ selectForm.addEventListener ("submit", (event) => {
   const check = checkForm();
   if (check){ 
     const contact = new Contact (selectFirstName.value,selectLastName.value,selectAddress.value,selectCity.value,selectEmail.value);
-    console.log (contact);
     const products = setIdArray (cart);
-    console.log (products);
     getId (contact,products) ;
     localStorage.clear();
-
   }
   else{ return null}
 })
 
-// fonction de recupération de la clé id d'un array d'objet
+
+/*
+* function setIdArray (array)
+* fonction qui appliquer une fonction  sur chaque element du tableau en parametre et
+* recupérer la clé id
+* @param : {array} 
+* @return : {array} id 
+*/
+
 function setIdArray (array) {
- 
-  // array.map(item=>item.id);
   return array.map(item=>item.id);
 }
 
-// requete POST 
+
+
+/*
+* function getId (contact,products)
+* fonction qui va effectuer une requet POST vers l'API 
+* prend en parametre les elemenst attendus par l'API
+* elle va recupérer l'id de la commande renvoyé par l'API et 
+* rediriger l'utilisateur vers la page de confimration 
+* @param : {object} contact
+* @param : {array} id products
+*/
+
 
  function getId (contact,products) {
-  fetch("http://localhost:3000/api/products/order", {
+  fetch("http://localhost:3000/api/products/order",
+  {
 	method: "POST",
 	headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
   body : JSON.stringify({contact,products})
   }
   )
   .then (async response => {
-        try{
-    const getId = await response.json();
-    console.log(getId);
-    console.log(getId.orderId);
-    location.assign(`./confirmation.html?id=${getId.orderId}`);
-  
-   
-   
-  } catch (e){
-    console.log(e);
-  }
-})
+      try{
+          const getId = await response.json();
+          location.assign(`./confirmation.html?id=${getId.orderId}`);
+      }
+      catch (e){
+          console.log(e);
+      }
+  })
 }
 
 
