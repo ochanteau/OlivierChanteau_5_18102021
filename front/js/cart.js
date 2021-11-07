@@ -1,16 +1,24 @@
 
-// recupération du panier dans le localStorage
+/*  
+*  creation d'une variable 
+*  qui recupére l'array associé à la  clé "panier" du local storage
+*  au format objet javascript
+*/
 let cart = JSON.parse(localStorage.getItem("panier"));
-console.log(cart);
 
 // ciblage prix total et quantité total
 
 const  selectTotalQuantity = document.getElementById("totalQuantity");
 const  selectTotalPrice = document.getElementById("totalPrice");
 
-// vérification que le panier n 'est pas vide ou Null
 
-function updateCart() {
+/*
+* fonction updateCartPage()
+* Elle verifie que le panier n 'est pas vide ou nulle 
+* Si il est vide ou nulle, affiche 0 pour la quantité total et le prix total
+* si il n'est pas vide , appel la fonction displayCart
+*/
+function updateCartPage() {
     if ( !cart || cart.length == 0) {
         selectTotalQuantity.textContent = "0";
         selectTotalPrice.textContent = "0";
@@ -19,14 +27,19 @@ function updateCart() {
 
   }
 
-// Fonction qui lance l'affichage des différents éléménts du panier sur la page ainsi que la quantité et le prix total
 
+
+/*
+* fonction displayCart(array)
+* Fonction  qui effectue une requete à l'API pour chaque élément du tableau passé en argument
+* avec la réponse, appelle la fonction display product
+* affiche et mets à jour la quantité total et le prix total
+* @param {array} tableau d'objets {object.id, object.quantity,object.color}
+*/
 function displayCart(array) {
     let totalQuantity = 0;
     let totalPrice = 0;
     array.forEach((data,index,array) => {
-        
-          
         fetch(`http://localhost:3000/api/products/${data.id}`)
         .then (async response => {
           try{
@@ -100,7 +113,7 @@ cartList.addEventListener("change", event => {
   if (event.target.value == 0) { removeItem(cart,cartItem)}
   else {quantityModification (cart,cartItem,event)}
   document.querySelector("#cart__items").innerHTML =""; 
-  updateCart();
+  updateCartPage();
   localStorage.clear();
   localStorage.setItem("panier", JSON.stringify(cart));
 });
@@ -133,7 +146,7 @@ function quantityModification (array,element,event) {
       const cartItem = event.target.closest(".cart__item");
       removeItem(cart,cartItem);
       document.querySelector("#cart__items").innerHTML ="";
-      updateCart() ; 
+      updateCartPage() ; 
       localStorage.clear();
       localStorage.setItem("panier", JSON.stringify(cart));
       }
@@ -198,10 +211,12 @@ function checkForm () {
   } else {
     counter += 1
     document.getElementById("cityErrorMsg").textContent = ""}
+
   if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(selectEmail.value)) {
     counter += 1
     document.getElementById("emailErrorMsg").textContent = ""  }
   else { document.getElementById("emailErrorMsg").textContent = "Merci de renseigner un email valide" }
+
   if (counter === 5){ return true}
   else return false
 
@@ -278,4 +293,4 @@ function setIdArray (array) {
  *
  */
 
- updateCart();
+ updateCartPage();
