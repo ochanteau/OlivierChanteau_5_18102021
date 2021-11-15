@@ -127,11 +127,10 @@ class cartItem {
 
 function verification (array,object) {
   const verification = array.findIndex(x=> x.id === object.id && x.color === object.color );
-    console.log(verification);
-    if (verification !== -1) { array[verification].quantity += object.quantity}
-    else {
+  if (verification !== -1) { array[verification].quantity += object.quantity}
+  else {
       array.push(object);
-    }
+  }
 }
 
 
